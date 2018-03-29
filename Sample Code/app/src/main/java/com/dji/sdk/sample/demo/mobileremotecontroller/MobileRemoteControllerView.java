@@ -2,13 +2,16 @@ package com.dji.sdk.sample.demo.mobileremotecontroller;
 
 import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 import com.dji.sdk.sample.R;
 import com.dji.sdk.sample.internal.controller.DJISampleApplication;
@@ -40,6 +43,7 @@ public class MobileRemoteControllerView extends RelativeLayout
     private Button btnTakeOff;
     private Button autoLand;
     private Button forceLand;
+    private Button voiceCommand;
 
     private TextView textView;
 
@@ -86,6 +90,7 @@ public class MobileRemoteControllerView extends RelativeLayout
     private void initUI() {
         btnTakeOff = (Button) findViewById(R.id.btn_take_off);
         autoLand = (Button) findViewById(R.id.btn_auto_land);
+        voiceCommand = (Button) findViewById(R.id.btn_goto_voice_command);
         autoLand.setOnClickListener(this);
         forceLand = (Button) findViewById(R.id.btn_force_land);
         forceLand.setOnClickListener(this);
@@ -97,6 +102,7 @@ public class MobileRemoteControllerView extends RelativeLayout
         screenJoystickLeft = (OnScreenJoystick) findViewById(R.id.directionJoystickLeft);
 
         btnTakeOff.setOnClickListener(this);
+        voiceCommand.setOnClickListener(this);
         btnSimulator.setOnCheckedChangeListener(MobileRemoteControllerView.this);
 
         Boolean isSimulatorOn = (Boolean) KeyManager.getInstance().getValue(isSimulatorActived);
@@ -218,6 +224,10 @@ public class MobileRemoteControllerView extends RelativeLayout
                         DialogUtils.showDialogBasedOnError(getContext(), djiError);
                     }
                 });
+                break;
+            case R.id.btn_goto_voice_command:
+                Intent intent = new Intent(getContext(),MobileRemoteControllerActivity.class);
+                getContext().startActivity(intent);
                 break;
             default:
                 break;

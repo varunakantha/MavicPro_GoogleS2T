@@ -61,6 +61,13 @@
             android:text="Auto Land"
             android:layout_marginBottom="10dp"
             style="@style/common_button"/>
+        <Button
+            android:id="@+id/btn_goto_voice_command"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:text="Voice Command"
+            android:layout_marginBottom="10dp"
+            style="@style/common_button"/>
     </LinearLayout>
 
     <com.dji.sdk.sample.internal.utils.OnScreenJoystick
