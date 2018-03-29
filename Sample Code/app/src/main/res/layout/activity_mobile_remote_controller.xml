@@ -7,7 +7,7 @@
     tools:context="com.dji.sdk.sample.demo.mobileremotecontroller.MobileRemoteControllerActivity">
 
     <Button
-        android:id="@+id/button_up"
+        android:id="@+id/button_voice_command"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"

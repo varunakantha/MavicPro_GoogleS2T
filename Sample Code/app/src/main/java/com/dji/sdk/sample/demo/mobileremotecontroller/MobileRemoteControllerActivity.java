@@ -24,58 +24,64 @@ public class MobileRemoteControllerActivity extends AppCompatActivity {
     Button up;
     FlightController flightController;
     private final int REQ_CODE_SPEECH_INPUT = 100;
+    Button voiceCommand;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mobile_remote_controller);
-        up = (Button) findViewById(R.id.button_up);
-
-         flightController = ModuleVerificationUtil.getFlightController();
-        if (flightController == null) {
-            return;
-        }
-
-        up.setOnClickListener(new View.OnClickListener() {
+        voiceCommand = (Button)findViewById(R.id.button_voice_command);
+        voiceCommand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startVoiceCommanding();
             }
         });
+
+
     }
 
 
     public void startVoiceCommanding() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                        RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-                intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
-                        "Give me a command...");
-                try {
-                    startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
-                } catch (ActivityNotFoundException a) {
-                    Toast.makeText(getApplicationContext(),
-                            "Sorry, Your device doesn't support Speach input",
-                            Toast.LENGTH_SHORT).show();
-                }
-            }
-        }).start();
+
+       new Thread(new Runnable() {
+           @Override
+           public void run() {
+               Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+               intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                       RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+               intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+               intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
+                       "Give me a command...");
+               try {
+                   startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
+               } catch (ActivityNotFoundException a) {
+                   Toast.makeText(getApplicationContext(),
+                           "Sorry, Your device doesn't support Speech input",
+                           Toast.LENGTH_SHORT).show();
+               }
+           }
+       }).start();
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        flightController = ModuleVerificationUtil.getFlightController();
+        if (flightController == null) {
+            return;
+        }
+
         switch (requestCode) {
             case REQ_CODE_SPEECH_INPUT: {
                 if (resultCode == RESULT_OK && null != data) {
 
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-
-                    if(result.get(0).equalsIgnoreCase("start")){
+                    Toast.makeText(this, result.get(0), Toast.LENGTH_SHORT).show();
+                    if (result.get(0).equalsIgnoreCase("start")) {
+                        Toast.makeText(this, "Start", Toast.LENGTH_SHORT).show();
                         flightController.startTakeoff(new CommonCallbacks.CompletionCallback() {
                             @Override
                             public void onResult(DJIError djiError) {
@@ -84,7 +90,8 @@ public class MobileRemoteControllerActivity extends AppCompatActivity {
                         });
                     }
 
-                    if(result.get(0).equalsIgnoreCase("stop")){
+                    if (result.get(0).equalsIgnoreCase("stop")) {
+                        Toast.makeText(this, "Stop", Toast.LENGTH_SHORT).show();
                         flightController.startLanding(new CommonCallbacks.CompletionCallback() {
                             @Override
                             public void onResult(DJIError djiError) {
@@ -94,7 +101,8 @@ public class MobileRemoteControllerActivity extends AppCompatActivity {
 
                     }
 
-                    if(result.get(0).equalsIgnoreCase("done")){
+                    if (result.get(0).equalsIgnoreCase("done")) {
+                        Toast.makeText(this, "Done", Toast.LENGTH_SHORT).show();
                         flightController.confirmLanding(new CommonCallbacks.CompletionCallback() {
                             @Override
                             public void onResult(DJIError djiError) {
@@ -103,11 +111,14 @@ public class MobileRemoteControllerActivity extends AppCompatActivity {
                         });
 
                     }
-
+                    startVoiceCommanding();
                 }
+
                 break;
+
             }
 
         }
+
     }
 }
