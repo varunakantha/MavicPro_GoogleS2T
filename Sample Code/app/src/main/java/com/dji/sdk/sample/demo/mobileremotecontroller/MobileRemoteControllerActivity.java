@@ -21,10 +21,10 @@ import dji.sdk.flightcontroller.FlightController;
 
 public class MobileRemoteControllerActivity extends AppCompatActivity {
 
-    Button up;
     FlightController flightController;
     private final int REQ_CODE_SPEECH_INPUT = 100;
     Button voiceCommand;
+    boolean isFlightOnAir = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,8 +79,10 @@ public class MobileRemoteControllerActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK && null != data) {
 
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    Toast.makeText(this, result.get(0), Toast.LENGTH_SHORT).show();
-                    if (result.get(0).equalsIgnoreCase("start")) {
+                    //Toast.makeText(this, result.get(0), Toast.LENGTH_SHORT).show();
+
+                    if (result.get(0).equalsIgnoreCase("start") && isFlightOnAir==false) {
+                        isFlightOnAir=true;
                         Toast.makeText(this, "Start", Toast.LENGTH_SHORT).show();
                         flightController.startTakeoff(new CommonCallbacks.CompletionCallback() {
                             @Override
@@ -109,7 +111,7 @@ public class MobileRemoteControllerActivity extends AppCompatActivity {
 
                             }
                         });
-
+                        isFlightOnAir=false;
                     }
                     startVoiceCommanding();
                 }
