@@ -26,6 +26,7 @@ public class MobileRemoteControllerActivity extends AppCompatActivity {
     Button voiceCommand;
     boolean isFlightOnAir = false;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,9 +45,9 @@ public class MobileRemoteControllerActivity extends AppCompatActivity {
 
     public void startVoiceCommanding() {
 
-       new Thread(new Runnable() {
+       /*new Thread(new Runnable() {
            @Override
-           public void run() {
+           public void run() {*/
                Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                        RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -60,15 +61,15 @@ public class MobileRemoteControllerActivity extends AppCompatActivity {
                            "Sorry, Your device doesn't support Speech input",
                            Toast.LENGTH_SHORT).show();
                }
-           }
-       }).start();
+          // }
+      // }).start();
 
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
+        super.onActivityResult(requestCode, resultCode, data);
         flightController = ModuleVerificationUtil.getFlightController();
         if (flightController == null) {
             return;
@@ -93,6 +94,7 @@ public class MobileRemoteControllerActivity extends AppCompatActivity {
                     }
 
                     if (result.get(0).equalsIgnoreCase("stop")) {
+                        isFlightOnAir=false;
                         Toast.makeText(this, "Stop", Toast.LENGTH_SHORT).show();
                         flightController.startLanding(new CommonCallbacks.CompletionCallback() {
                             @Override
@@ -104,6 +106,7 @@ public class MobileRemoteControllerActivity extends AppCompatActivity {
                     }
 
                     if (result.get(0).equalsIgnoreCase("done")) {
+                        isFlightOnAir=false;
                         Toast.makeText(this, "Done", Toast.LENGTH_SHORT).show();
                         flightController.confirmLanding(new CommonCallbacks.CompletionCallback() {
                             @Override
@@ -111,7 +114,7 @@ public class MobileRemoteControllerActivity extends AppCompatActivity {
 
                             }
                         });
-                        isFlightOnAir=false;
+
                     }
                     startVoiceCommanding();
                 }
