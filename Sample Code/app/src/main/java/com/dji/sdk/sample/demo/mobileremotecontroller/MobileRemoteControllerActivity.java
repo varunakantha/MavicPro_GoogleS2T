@@ -45,9 +45,6 @@ public class MobileRemoteControllerActivity extends AppCompatActivity {
 
     public void startVoiceCommanding() {
 
-       /*new Thread(new Runnable() {
-           @Override
-           public void run() {*/
                Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                        RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -61,8 +58,6 @@ public class MobileRemoteControllerActivity extends AppCompatActivity {
                            "Sorry, Your device doesn't support Speech input",
                            Toast.LENGTH_SHORT).show();
                }
-          // }
-      // }).start();
 
     }
 
